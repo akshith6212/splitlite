@@ -1,10 +1,4 @@
-## Architecture for Your Expense Splitting App
-
-This is a great project. Let me address your decisions, counter where needed, and lay out a full architecture.
-
----
-
-### Countering Your Technology Choices First
+## Architecture for Expense Splitting App
 
 **React Native → Use Expo (React Native underneath)**
 Plain React Native requires native build toolchains (Xcode, Android Studio) and separate CI/CD pipelines per platform. Expo gives you React Native under the hood but with a single codebase, OTA (over-the-air) updates without App Store resubmission, and `expo-router` which mirrors Next.js conventions. For an open-source app with contributors, this dramatically lowers the barrier to entry. When you eventually need native modules Expo doesn't support, you can "eject" to bare React Native.

@@ -18,3 +18,5 @@ buildNumber.properties
 
 # Ignore node package manager files
 node_modules/
+
+apps/web/.env.local

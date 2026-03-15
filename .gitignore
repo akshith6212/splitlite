@@ -16,7 +16,53 @@ buildNumber.properties
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
 
-# Ignore node package manager files
+# Dependency directories
 node_modules/
+jspm_packages/
 
-apps/web/.env.local
+# Next.js build and cache
+.next/
+out/
+build/
+.swc/
+
+# Expo / React Native
+.expo/
+dist/
+web-build/
+# If using Expo prebuild, ignore native folders
+ios/
+android/
+
+# Metro bundler
+.metro-health-check*
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables (Crucial for security)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Debug and temp files
+.cache/
+.npm
+.eslintcache
+.stylelintcache
+.node_repl_history
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Optional: Editor settings
+.vscode/
+.idea/

@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "name": "SplitLite",
+    "slug": "splitlite",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "splitlite",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.splitlite.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#4F46E5"
+      },
+      "package": "com.splitlite.app"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "e37219a9-ecf4-4786-ada9-a9e7402657cf"
+      }
+    }
+  }
+}

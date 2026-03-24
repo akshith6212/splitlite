@@ -15,6 +15,7 @@ import {
   confirmSignUp as authConfirmSignUp,
   getCurrentUser,
 } from '@/lib/auth';
+import { usersApi } from '@/lib/api';
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -59,6 +60,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const authUser = await authSignIn(email, password);
       setUser(authUser);
+      // Provision the DynamoDB user profile on first login (no-op if it already exists)
+      usersApi.getMe().catch(() => {
+        // Non-fatal: profile creation will be retried next time
+      });
     } catch (err) {
       const authErr = err as AuthError;
       setError(authErr);

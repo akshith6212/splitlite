@@ -199,44 +199,68 @@ function del<T>(path: string): Promise<T> {
   return request<T>(path, { method: 'DELETE' });
 }
 
+// ─── Users ────────────────────────────────────────────────────────────────────
+
+export const usersApi = {
+  /** Fetches current user profile; auto-provisions it on first login. */
+  getMe: (): Promise<User> =>
+    get<{ user: User }>('/users/me').then((r) => r.user),
+
+  updateMe: (input: { name?: string; avatarUrl?: string }): Promise<User> =>
+    put<{ user: User }>('/users/me', input).then((r) => r.user),
+};
+
 // ─── Groups ───────────────────────────────────────────────────────────────────
 
 export const groupsApi = {
-  list: (): Promise<Group[]> => get<Group[]>('/groups'),
+  list: (): Promise<Group[]> =>
+    get<{ groups: Group[] }>('/groups').then((r) => r.groups),
 
-  get: (groupId: string): Promise<Group> => get<Group>(`/groups/${groupId}`),
+  get: (groupId: string): Promise<Group> =>
+    get<{ group: Group }>(`/groups/${groupId}`).then((r) => r.group),
 
-  create: (input: CreateGroupInput): Promise<Group> => post<Group>('/groups', input),
+  create: (input: CreateGroupInput): Promise<Group> =>
+    post<{ group: Group }>('/groups', input).then((r) => r.group),
 
   update: (groupId: string, input: UpdateGroupInput): Promise<Group> =>
-    put<Group>(`/groups/${groupId}`, input),
+    put<{ group: Group }>(`/groups/${groupId}`, input).then((r) => r.group),
 
   delete: (groupId: string): Promise<void> => del<void>(`/groups/${groupId}`),
 
   addMember: (groupId: string, userIdOrEmail: string): Promise<GroupMember> =>
-    post<GroupMember>(`/groups/${groupId}/members`, { userId: userIdOrEmail }),
+    post<{ member: GroupMember }>(`/groups/${groupId}/members`, { userId: userIdOrEmail }).then(
+      (r) => r.member
+    ),
 
   removeMember: (groupId: string, userId: string): Promise<void> =>
     del<void>(`/groups/${groupId}/members/${userId}`),
 
   getMembers: (groupId: string): Promise<GroupMember[]> =>
-    get<GroupMember[]>(`/groups/${groupId}/members`),
+    get<{ members: GroupMember[] }>(`/groups/${groupId}/members`).then((r) => r.members),
 };
 
 // ─── Transactions ─────────────────────────────────────────────────────────────
 
 export const transactionsApi = {
   list: (groupId: string): Promise<Transaction[]> =>
-    get<Transaction[]>(`/groups/${groupId}/transactions`),
+    get<{ transactions: Transaction[] }>(`/groups/${groupId}/transactions`).then(
+      (r) => r.transactions
+    ),
 
   get: (groupId: string, txnId: string): Promise<Transaction> =>
-    get<Transaction>(`/groups/${groupId}/transactions/${txnId}`),
+    get<{ transaction: Transaction }>(`/groups/${groupId}/transactions/${txnId}`).then(
+      (r) => r.transaction
+    ),
 
   create: (groupId: string, input: CreateTransactionInput): Promise<Transaction> =>
-    post<Transaction>(`/groups/${groupId}/transactions`, input),
+    post<{ transaction: Transaction }>(`/groups/${groupId}/transactions`, input).then(
+      (r) => r.transaction
+    ),
 
   update: (groupId: string, txnId: string, input: UpdateTransactionInput): Promise<Transaction> =>
-    put<Transaction>(`/groups/${groupId}/transactions/${txnId}`, input),
+    put<{ transaction: Transaction }>(`/groups/${groupId}/transactions/${txnId}`, input).then(
+      (r) => r.transaction
+    ),
 
   delete: (groupId: string, txnId: string): Promise<void> =>
     del<void>(`/groups/${groupId}/transactions/${txnId}`),
@@ -247,12 +271,18 @@ export const transactionsApi = {
 export const settlementsApi = {
   list: (groupId: string, status?: SettlementStatus): Promise<Settlement[]> => {
     const query = status ? `?status=${status}` : '';
-    return get<Settlement[]>(`/groups/${groupId}/settlements${query}`);
+    return get<{ settlements: Settlement[] }>(`/groups/${groupId}/settlements${query}`).then(
+      (r) => r.settlements
+    );
   },
 
   get: (groupId: string, settlementId: string): Promise<Settlement> =>
-    get<Settlement>(`/groups/${groupId}/settlements/${settlementId}`),
+    get<{ settlement: Settlement }>(`/groups/${groupId}/settlements/${settlementId}`).then(
+      (r) => r.settlement
+    ),
 
   markAsPaid: (groupId: string, settlementId: string): Promise<Settlement> =>
-    post<Settlement>(`/groups/${groupId}/settlements/${settlementId}/pay`, {}),
+    post<{ settlement: Settlement }>(`/groups/${groupId}/settlements/${settlementId}/pay`, {}).then(
+      (r) => r.settlement
+    ),
 };

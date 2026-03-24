@@ -34,11 +34,6 @@ export default $config({
       {
         handler: 'functions/settlementCalculator/handler.handler',
         link: [table],
-        // Keep concurrency low — settlement recalculation is idempotent and
-        // can safely be delayed rather than causing a thundering herd.
-        concurrency: {
-          reserved: 5,
-        },
       },
       {
         filters: [
@@ -84,13 +79,81 @@ export default $config({
       },
     });
 
-    // Common function config shared across all route handlers
+    // JWT authorizer backed by the Cognito user pool
+    const authorizer = api.addAuthorizer({
+      name: 'CognitoJwtAuthorizer',
+      jwt: {
+        issuer: $interpolate`https://cognito-idp.us-east-1.amazonaws.com/${userPool.id}`,
+        audiences: [userPoolClient.id],
+      },
+    });
+
+    // Common config shared by all protected route handlers
     const fnDefaults = {
       link: [table],
       environment: {
         TABLE_NAME: table.name,
       },
+      auth: {
+        jwt: { authorizer: authorizer.id },
+      },
     };
+
+    // -----------------------------------------------------------------------
+    // Users routes
+    // -----------------------------------------------------------------------
+    api.route('GET /users/me', {
+      ...fnDefaults,
+      handler: 'functions/users/handler.handler',
+    });
+
+    api.route('PUT /users/me', {
+      ...fnDefaults,
+      handler: 'functions/users/handler.handler',
+    });
+
+    // -----------------------------------------------------------------------
+    // Groups routes
+    // -----------------------------------------------------------------------
+    api.route('GET /groups', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('POST /groups', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('GET /groups/{groupId}', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('PUT /groups/{groupId}', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('DELETE /groups/{groupId}', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('GET /groups/{groupId}/members', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('POST /groups/{groupId}/members', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
+
+    api.route('DELETE /groups/{groupId}/members/{userId}', {
+      ...fnDefaults,
+      handler: 'functions/groups/handler.handler',
+    });
 
     // -----------------------------------------------------------------------
     // Transactions routes
@@ -139,7 +202,7 @@ export default $config({
     });
 
     // -----------------------------------------------------------------------
-    // Outputs
+    // Outputs — printed after deploy, also used by mobile .env
     // -----------------------------------------------------------------------
     return {
       ApiEndpoint: api.url,

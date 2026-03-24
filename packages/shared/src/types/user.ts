@@ -5,3 +5,8 @@ export interface User {
   avatarUrl?: string;
   createdAt: string; // ISO 8601
 }
+
+export interface UpdateUserInput {
+  name?: string;
+  avatarUrl?: string;
+}

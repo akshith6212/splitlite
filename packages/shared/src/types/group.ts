@@ -15,4 +15,18 @@ export interface GroupMember {
   userId: string;
   role: GroupMemberRole;
   joinedAt: string; // ISO 8601
+  name?: string;
+  email?: string;
+}
+
+export interface CreateGroupInput {
+  name: string;
+  currency: string;
+  description?: string;
+}
+
+export interface UpdateGroupInput {
+  name?: string;
+  currency?: string;
+  description?: string;
 }

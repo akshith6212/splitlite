@@ -47,6 +47,12 @@ export const Keys = {
     PK: `USER#${userId}`,
     SK: `GROUP#${groupId}`,
   }),
+
+  // Secondary lookup: find userId by email (written when user profile is created)
+  userEmailLookup: (email: string) => ({
+    PK: `USER_EMAIL#${email.toLowerCase()}`,
+    SK: 'LOOKUP',
+  }),
 } as const;
 
 /** SK prefix constants for begins_with queries */
